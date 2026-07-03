@@ -1,6 +1,6 @@
 {
   "repository": "Sterenna-studio/sterenna-icons",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "naming": {
     "pattern": "<scope>-<project>",
     "exports": [
@@ -67,6 +67,27 @@
       "priority": "P0",
       "themeColor": "#070b14",
       "visualBase": "carte / BZH power"
+    },
+    {
+      "iconId": "bzh-breach-storm",
+      "repo": "Sterenna-studio/bzh-breach-storm",
+      "priority": "P1",
+      "themeColor": "#090711",
+      "visualBase": "faille / tempête"
+    },
+    {
+      "iconId": "bzh-nemeton-lockdown",
+      "repo": "Sterenna-studio/bzh-nemeton-lockdown",
+      "priority": "P1",
+      "themeColor": "#07120b",
+      "visualBase": "arbre sacré / verrou"
+    },
+    {
+      "iconId": "spirit-overdrive",
+      "repo": "Sterenna-studio/spirit-overdrive",
+      "priority": "P1",
+      "themeColor": "#080816",
+      "visualBase": "esprit / vitesse"
     }
   ]
 }

@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sterenna Icons — GUI Config</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@300..700&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS ── */
+:root, [data-theme="dark"] {
+  --color-bg:             #0d0d0f;
+  --color-surface:        #141417;
+  --color-surface-2:      #1a1a1e;
+  --color-surface-3:      #202024;
+  --color-border:         rgba(255,255,255,0.07);
+  --color-divider:        rgba(255,255,255,0.05);
+  --color-text:           #e2e1de;
+  --color-text-muted:     #7a7978;
+  --color-text-faint:     #44433f;
+  --color-primary:        #4f98a3;
+  --color-primary-hover:  #3a7e8a;
+  --color-primary-glow:   rgba(79,152,163,0.15);
+  --color-success:        #6daa45;
+  --color-warning:        #d4873a;
+  --color-error:          #c94f6d;
+  --color-p0:             #4f98a3;
+  --color-p1:             #a86fdf;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --font-mono: 'JetBrains Mono', 'Consolas', monospace;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --transition: 160ms cubic-bezier(0.16,1,0.3,1);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.4);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.5);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,0.6);
+}
+[data-theme="light"] {
+  --color-bg:             #f5f5f3;
+  --color-surface:        #fafaf8;
+  --color-surface-2:      #ffffff;
+  --color-surface-3:      #f0efec;
+  --color-border:         rgba(0,0,0,0.08);
+  --color-divider:        rgba(0,0,0,0.05);
+  --color-text:           #1a1a1c;
+  --color-text-muted:     #6b6a67;
+  --color-text-faint:     #b0afab;
+  --color-primary:        #2a7f8a;
+  --color-primary-hover:  #1e626b;
+  --color-primary-glow:   rgba(42,127,138,0.12);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.1);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,0.15);
+}
+
+/* ── RESET ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 14px; -webkit-font-smoothing: antialiased; }
+body {
+  font-family: var(--font-body);
+  background: var(--color-bg);
+  color: var(--color-text);
+  min-height: 100vh;
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+}
+button, input, select, textarea { font: inherit; color: inherit; border: none; background: none; cursor: pointer; }
+a { color: var(--color-primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+input, textarea { cursor: text; }
+
+/* ── LAYOUT ── */
+.app { display: flex; flex-direction: column; min-height: 100vh; }
+
+/* HEADER */
+.header {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  padding: 0 20px;
+  height: 52px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.header-left { display: flex; align-items: center; gap: 12px; }
+.logo-svg { color: var(--color-primary); flex-shrink: 0; }
+.header-title {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--color-text);
+}
+.header-subtitle {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+}
+.header-right { display: flex; align-items: center; gap: 8px; }
+
+/* MAIN */
+.main { display: flex; flex: 1; overflow: hidden; }
+
+/* SIDEBAR */
+.sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+.sidebar-section { padding: 12px 0; }
+.sidebar-label {
+  padding: 4px 16px 8px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+}
+.project-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 0;
+  transition: background var(--transition);
+  position: relative;
+  user-select: none;
+}
+.project-item:hover { background: var(--color-surface-2); }
+.project-item.active {
+  background: var(--color-primary-glow);
+  color: var(--color-primary);
+}
+.project-item.active::before {
+  content: '';
+  position: absolute; left: 0; top: 4px; bottom: 4px;
+  width: 2px;
+  background: var(--color-primary);
+  border-radius: 0 2px 2px 0;
+}
+.project-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dot-p0 { background: var(--color-p0); }
+.dot-p1 { background: var(--color-p1); }
+.project-name {
+  font-size: 13px;
+  font-weight: 500;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* CONTENT */
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.content-header {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
+}
+.content-title { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+.content-meta { font-size: 12px; color: var(--color-text-muted); margin-top: 3px; display: flex; gap: 12px; align-items: center; }
+.badge {
+  font-size: 10px;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  padding: 2px 7px;
+  border-radius: 9999px;
+  letter-spacing: 0.04em;
+}
+.badge-p0 { background: rgba(79,152,163,0.15); color: var(--color-p0); }
+.badge-p1 { background: rgba(168,111,223,0.15); color: var(--color-p1); }
+
+/* CARDS */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.card-header {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--color-border);
+  display: flex; align-items: center; gap: 10px;
+}
+.card-header-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text);
+  flex: 1;
+}
+.card-body { padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+
+/* FORM */
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.field-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.field-input {
+  padding: 8px 12px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  color: var(--color-text);
+  transition: border-color var(--transition), box-shadow var(--transition);
+  outline: none;
+  font-family: var(--font-mono);
+}
+.field-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-glow);
+}
+.field-input.wide { font-family: var(--font-body); }
+select.field-input { cursor: pointer; }
+.color-row { display: flex; align-items: center; gap: 8px; }
+.color-swatch {
+  width: 32px; height: 32px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: transform var(--transition);
+}
+.color-swatch:hover { transform: scale(1.05); }
+input[type="color"] {
+  width: 32px; height: 32px;
+  padding: 2px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  cursor: pointer;
+}
+
+/* EXPORTS GRID */
+.exports-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 8px;
+}
+.export-item {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 12px 8px;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  cursor: pointer;
+  transition: border-color var(--transition), background var(--transition);
+  position: relative;
+}
+.export-item:hover { background: var(--color-surface-2); border-color: rgba(255,255,255,0.12); }
+.export-icon { font-size: 22px; }
+.export-name { font-size: 11px; font-family: var(--font-mono); color: var(--color-text-muted); text-align: center; }
+.export-size { font-size: 10px; color: var(--color-text-faint); }
+.export-status {
+  width: 6px; height: 6px; border-radius: 50%;
+  position: absolute; top: 8px; right: 8px;
+}
+.status-ok { background: var(--color-success); }
+.status-missing { background: var(--color-error); }
+.status-unknown { background: var(--color-text-faint); }
+
+/* HTML SNIPPET */
+.code-block {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  line-height: 1.7;
+  overflow-x: auto;
+  white-space: pre;
+  color: var(--color-text-muted);
+  position: relative;
+}
+.code-block .c-tag { color: #e06c75; }
+.code-block .c-attr { color: #d19a66; }
+.code-block .c-val { color: #98c379; }
+.code-block .c-comment { color: var(--color-text-faint); }
+
+/* BUTTONS */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 14px;
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  font-weight: 600;
+  transition: background var(--transition), box-shadow var(--transition), transform var(--transition);
+  letter-spacing: 0.01em;
+}
+.btn:active { transform: scale(0.98); }
+.btn-primary {
+  background: var(--color-primary);
+  color: #fff;
+}
+.btn-primary:hover { background: var(--color-primary-hover); box-shadow: 0 0 0 3px var(--color-primary-glow); }
+.btn-ghost {
+  background: transparent;
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+}
+.btn-ghost:hover { background: var(--color-surface-2); color: var(--color-text); }
+.btn-icon {
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  transition: background var(--transition), color var(--transition);
+}
+.btn-icon:hover { background: var(--color-surface-2); color: var(--color-text); }
+.btn-sm { padding: 5px 10px; font-size: 11px; }
+
+/* TABS */
+.tabs { display: flex; gap: 2px; background: var(--color-bg); border-radius: var(--radius-md); padding: 3px; }
+.tab {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  transition: background var(--transition), color var(--transition);
+  cursor: pointer;
+}
+.tab.active { background: var(--color-surface); color: var(--color-text); box-shadow: var(--shadow-sm); }
+.tab:hover:not(.active) { color: var(--color-text); }
+.tab-panel { display: none; }
+.tab-panel.active { display: flex; flex-direction: column; gap: 20px; }
+
+/* TOAST */
+.toast-container {
+  position: fixed; bottom: 20px; right: 20px;
+  display: flex; flex-direction: column; gap: 8px;
+  z-index: 999;
+}
+.toast {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  font-size: 12px;
+  box-shadow: var(--shadow-md);
+  display: flex; align-items: center; gap: 8px;
+  animation: slide-in 0.2s ease;
+  max-width: 280px;
+}
+@keyframes slide-in { from { transform: translateX(20px); opacity: 0; } to { transform: none; opacity: 1; } }
+.toast-success { border-color: rgba(109,170,69,0.3); }
+.toast-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+
+/* CHECKLIST */
+.checklist { display: flex; flex-direction: column; gap: 8px; }
+.check-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: border-color var(--transition);
+  cursor: pointer;
+}
+.check-item.done { border-color: rgba(109,170,69,0.2); }
+.checkbox {
+  width: 16px; height: 16px;
+  border-radius: 4px;
+  border: 1.5px solid var(--color-border);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: background var(--transition), border-color var(--transition);
+}
+.checkbox.checked { background: var(--color-success); border-color: var(--color-success); }
+.check-label { font-size: 12px; font-family: var(--font-mono); color: var(--color-text-muted); }
+.check-item.done .check-label { color: var(--color-text-faint); text-decoration: line-through; }
+.check-label span { color: var(--color-text); text-decoration: none; }
+
+/* REG TABLE */
+.reg-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.reg-table th {
+  text-align: left;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--color-border);
+}
+.reg-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--color-divider);
+  vertical-align: middle;
+}
+.reg-table tr:last-child td { border-bottom: none; }
+.reg-table tr:hover td { background: var(--color-surface-2); }
+.monospace { font-family: var(--font-mono); color: var(--color-text-muted); }
+
+/* PROGRESS */
+.progress-bar-wrap { background: var(--color-bg); border-radius: 9999px; height: 4px; overflow: hidden; }
+.progress-bar { height: 100%; border-radius: 9999px; background: var(--color-primary); transition: width 0.4s ease; }
+
+/* EMPTY */
+.empty-state {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--color-text-muted);
+  gap: 12px;
+  height: 100%;
+}
+.empty-icon { font-size: 36px; opacity: 0.4; }
+.empty-title { font-size: 14px; font-weight: 600; color: var(--color-text); }
+.empty-desc { font-size: 12px; max-width: 30ch; }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-left">
+    <svg class="logo-svg" width="28" height="28" viewBox="0 0 28 28" fill="none" aria-label="Sterenna Icons">
+      <rect x="2" y="2" width="11" height="11" rx="2" fill="currentColor" opacity="0.9"/>
+      <rect x="15" y="2" width="11" height="11" rx="2" fill="currentColor" opacity="0.5"/>
+      <rect x="2" y="15" width="11" height="11" rx="2" fill="currentColor" opacity="0.5"/>
+      <rect x="15" y="15" width="11" height="11" rx="2" fill="currentColor" opacity="0.25"/>
+    </svg>
+    <div>
+      <div class="header-title">Sterenna Icons</div>
+      <div class="header-subtitle">v0.1.1 — GUI Config</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <a href="https://github.com/Sterenna-studio/sterenna-icons" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+      GitHub
+    </a>
+    <button class="btn-icon" onclick="toggleTheme()" aria-label="Basculer le thème" title="Thème clair/sombre" id="theme-btn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </div>
+</header>
+
+<!-- BODY -->
+<div class="main">
+  <nav class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Priorité P0</div>
+      <div id="sidebar-p0"></div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Priorité P1</div>
+      <div id="sidebar-p1"></div>
+    </div>
+  </nav>
+  <main class="content" id="content">
+    <div class="empty-state">
+      <div class="empty-icon">◈</div>
+      <div class="empty-title">Sélectionne un projet</div>
+      <div class="empty-desc">Clique sur un projet dans la sidebar pour configurer ses icônes.</div>
+    </div>
+  </main>
+</div>
+</div>
+
+<div class="toast-container" id="toast-container"></div>
+
+<script>
+const REGISTRY = {"repository":"Sterenna-studio/sterenna-icons","version":"0.1.1","naming":{"pattern":"<scope>-<project>","exports":["favicon.ico","favicon.svg","favicon-32.png","apple-touch-icon.png","site.webmanifest"]},"icons":[{"iconId":"star-gwen-ha-star","repo":"Sterenna-studio/gwen-ha-star-static","priority":"P0","themeColor":"#070b14","visualBase":"logo Gwen Ha Star"},{"iconId":"bzh-universe","repo":"Sterenna-studio/bzh-universe","priority":"P0","themeColor":"#070b14","visualBase":"triskel / BZH cyber"},{"iconId":"nitro-clicker","repo":"Sterenna-studio/nitro-clicker","priority":"P0","themeColor":"#070b14","visualBase":"éclair / monnaie / pixel"},{"iconId":"botanica-obscura","repo":"Sterenna-studio/botanica-obscura","priority":"P0","themeColor":"#08120d","visualBase":"feuille obscure / graine"},{"iconId":"nitro-skill-arena","repo":"Sterenna-studio/skill-arena","priority":"P0","themeColor":"#100814","visualBase":"arène / lame / skill"},{"iconId":"nitro-titan-rocket-run","repo":"Sterenna-studio/titan-rocket-run","priority":"P0","themeColor":"#070b14","visualBase":"fusée Titan"},{"iconId":"pokegang","repo":"Sterenna-studio/pokegang-game","priority":"P0","themeColor":"#101018","visualBase":"pokéball/gang stylisé"},{"iconId":"chronicles-tcg","repo":"Sterenna-studio/chronicles-tcg","priority":"P0","themeColor":"#070b14","visualBase":"carte / BZH power"},{"iconId":"bzh-breach-storm","repo":"Sterenna-studio/bzh-breach-storm","priority":"P1","themeColor":"#090711","visualBase":"faille / tempête"},{"iconId":"bzh-nemeton-lockdown","repo":"Sterenna-studio/bzh-nemeton-lockdown","priority":"P1","themeColor":"#07120b","visualBase":"arbre sacré / verrou"},{"iconId":"spirit-overdrive","repo":"Sterenna-studio/spirit-overdrive","priority":"P1","themeColor":"#080816","visualBase":"esprit / vitesse"}]};
+
+const EXPORT_FILES = [
+  { name:"favicon.ico",icon:"🌐",size:"16–48px" },
+  { name:"favicon.svg",icon:"✦",size:"vectoriel" },
+  { name:"favicon-32.png",icon:"🖼",size:"32×32" },
+  { name:"apple-touch-icon.png",icon:"🍎",size:"180×180" },
+  { name:"site.webmanifest",icon:"📋",size:"JSON" },
+  { name:"icon-192.png",icon:"📱",size:"192×192" },
+  { name:"icon-512.png",icon:"📱",size:"512×512" },
+];
+
+const configState = {};
+REGISTRY.icons.forEach(ic => {
+  configState[ic.iconId] = {
+    themeColor: ic.themeColor,
+    visualBase: ic.visualBase,
+    repo: ic.repo,
+    priority: ic.priority,
+    checks: { ico:false,svg:false,png32:false,apple:false,manifest:false,ico192:false,ico512:false }
+  };
+});
+
+let activeId = null;
+let activeTab = 'config';
+
+function buildSidebar() {
+  const p0el = document.getElementById('sidebar-p0');
+  const p1el = document.getElementById('sidebar-p1');
+  REGISTRY.icons.forEach(ic => {
+    const el = document.createElement('div');
+    el.className = 'project-item';
+    el.id = 'nav-' + ic.iconId;
+    el.innerHTML = `<span class="project-dot dot-${ic.priority.toLowerCase()}"></span><span class="project-name">${ic.iconId.replace(/-/g,' ')}</span>`;
+    el.onclick = () => selectProject(ic.iconId);
+    (ic.priority === 'P0' ? p0el : p1el).appendChild(el);
+  });
+}
+
+function selectProject(id) {
+  activeId = id;
+  activeTab = 'config';
+  document.querySelectorAll('.project-item').forEach(el => el.classList.remove('active'));
+  const navEl = document.getElementById('nav-' + id);
+  if (navEl) navEl.classList.add('active');
+  renderContent(id);
+}
+
+function renderContent(id) {
+  const ic = REGISTRY.icons.find(x => x.iconId === id);
+  const cfg = configState[id];
+  const content = document.getElementById('content');
+  const completedChecks = Object.values(cfg.checks).filter(Boolean).length;
+  const totalChecks = Object.values(cfg.checks).length;
+  const pct = Math.round((completedChecks / totalChecks) * 100);
+  const exportBase = `https://github.com/Sterenna-studio/sterenna-icons/tree/main/exports/${id}`;
+
+  const htmlSnippet = generateHTMLSnippet(cfg.themeColor, id);
+
+  content.innerHTML = `
+  <div class="content-header">
+    <div>
+      <div class="content-title">${ic.iconId}</div>
+      <div class="content-meta">
+        <span class="badge badge-${ic.priority.toLowerCase()}">${ic.priority}</span>
+        <span>${ic.repo.split('/')[1]}</span>
+        <a href="https://github.com/${ic.repo}" target="_blank" rel="noopener">→ Repo</a>
+      </div>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:11px;color:var(--color-text-muted);margin-bottom:4px">Déploiement : ${completedChecks}/${totalChecks}</div>
+      <div class="progress-bar-wrap" style="width:120px"><div class="progress-bar" style="width:${pct}%"></div></div>
+    </div>
+  </div>
+
+  <div>
+    <div class="tabs">
+      <div class="tab ${activeTab==='config'?'active':''}" onclick="switchTab('config')">⚙ Config</div>
+      <div class="tab ${activeTab==='exports'?'active':''}" onclick="switchTab('exports')">📦 Exports</div>
+      <div class="tab ${activeTab==='deploy'?'active':''}" onclick="switchTab('deploy')">✓ Déploiement</div>
+      <div class="tab ${activeTab==='snippet'?'active':''}" onclick="switchTab('snippet')">‹ › HTML</div>
+    </div>
+  </div>
+
+  <div id="tab-config" class="tab-panel ${activeTab==='config'?'active':''}">
+    <div class="card">
+      <div class="card-header"><span class="card-header-title">Identité</span></div>
+      <div class="card-body">
+        <div class="field-row">
+          <div class="field"><label class="field-label">Icon ID</label><input class="field-input" type="text" value="${ic.iconId}" readonly style="opacity:0.6;cursor:not-allowed"></div>
+          <div class="field"><label class="field-label">Priorité</label>
+            <select class="field-input" onchange="updateCfg('${id}','priority',this.value)">
+              <option value="P0" ${cfg.priority==='P0'?'selected':''}>P0 — Production</option>
+              <option value="P1" ${cfg.priority==='P1'?'selected':''}>P1 — En cours</option>
+              <option value="P2">P2 — Futur</option>
+            </select>
+          </div>
+        </div>
+        <div class="field"><label class="field-label">Repo GitHub</label><input class="field-input wide" type="text" value="${cfg.repo}" onchange="updateCfg('${id}','repo',this.value)"></div>
+        <div class="field"><label class="field-label">Base Visuelle</label><input class="field-input wide" type="text" value="${cfg.visualBase}" onchange="updateCfg('${id}','visualBase',this.value)"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="card-header-title">Couleur thème</span><span style="font-size:11px;color:var(--color-text-faint);font-family:var(--font-mono)" id="color-label-${id}">${cfg.themeColor}</span></div>
+      <div class="card-body">
+        <div class="field">
+          <label class="field-label">theme-color (meta HTML + manifest)</label>
+          <div class="color-row">
+            <div class="color-swatch" id="swatch-${id}" style="background:${cfg.themeColor}" onclick="document.getElementById('cpick-${id}').click()"></div>
+            <input type="color" id="cpick-${id}" value="${cfg.themeColor}" style="position:absolute;opacity:0;pointer-events:none" oninput="updateColor('${id}',this.value)">
+            <input class="field-input" type="text" id="ctext-${id}" value="${cfg.themeColor}" oninput="updateColorText('${id}',this.value)" placeholder="#070b14" style="max-width:130px">
+            <div style="display:flex;gap:6px;margin-left:auto">
+              ${['#070b14','#08120d','#100814','#101018','#090711','#07120b','#080816'].map(c=>`<div onclick="applyPreset('${id}','${c}')" title="${c}" style="width:20px;height:20px;border-radius:4px;background:${c};border:1px solid rgba(255,255,255,0.1);cursor:pointer"></div>`).join('')}
+            </div>
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--color-text-faint)">💡 Utilisée dans <code style="font-family:var(--font-mono)">&lt;meta name="theme-color"&gt;</code> et <code style="font-family:var(--font-mono)">site.webmanifest</code></div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button class="btn btn-ghost btn-sm" onclick="resetCfg('${id}')">↺ Réinitialiser</button>
+      <button class="btn btn-primary btn-sm" onclick="saveCfg('${id}')">✓ Sauvegarder</button>
+    </div>
+  </div>
+
+  <div id="tab-exports" class="tab-panel ${activeTab==='exports'?'active':''}">
+    <div class="card">
+      <div class="card-header"><span class="card-header-title">Fichiers exports attendus</span><a href="${exportBase}" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">Voir sur GitHub →</a></div>
+      <div class="card-body">
+        <div class="exports-grid">
+          ${EXPORT_FILES.map((f,i) => { const keys=['ico','svg','png32','apple','manifest','ico192','ico512']; const key=keys[i]; const checked=cfg.checks[key]; return `<div class="export-item" onclick="toggleExportFile('${id}','${key}',this)" title="${f.name}"><div class="export-status ${checked?'status-ok':'status-unknown'}"></div><div class="export-icon">${f.icon}</div><div class="export-name">${f.name}</div><div class="export-size">${f.size}</div></div>`; }).join('')}
+        </div>
+        <div style="font-size:11px;color:var(--color-text-faint)">Cliquer sur un fichier pour marquer sa présence ✓</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-header-title">Sources SVG</span></div>
+      <div class="card-body">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+          ${['icon.svg','icon-dark.svg','icon-light.svg','notes.md'].map(f=>`<div style="background:var(--color-bg);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:10px;font-size:11px;font-family:var(--font-mono);color:var(--color-text-muted);display:flex;align-items:center;gap:6px"><span style="color:var(--color-text-faint)">${f.endsWith('.svg')?'✦':'📝'}</span>sources/${id}/${f}</div>`).join('')}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-deploy" class="tab-panel ${activeTab==='deploy'?'active':''}">
+    <div class="card">
+      <div class="card-header"><span class="card-header-title">Checklist déploiement favicon</span><span style="font-size:11px;color:var(--color-text-muted)">${completedChecks}/${totalChecks} validés</span></div>
+      <div class="card-body">
+        <div class="checklist">
+          ${Object.entries({ico:{label:'favicon.ico',desc:'généré et committé'},svg:{label:'favicon.svg',desc:'vectoriel, source de vérité'},png32:{label:'favicon-32.png',desc:'32×32, export PNG'},apple:{label:'apple-touch-icon.png',desc:'180×180, iOS'},manifest:{label:'site.webmanifest',desc:'themeColor = '+cfg.themeColor},ico192:{label:'icon-192.png',desc:'192×192, Android PWA'},ico512:{label:'icon-512.png',desc:'512×512, splash screen'}}).map(([key,info])=>`<div class="check-item ${cfg.checks[key]?'done':''}" id="chk-${id}-${key}" onclick="toggleCheck('${id}','${key}')"><div class="checkbox ${cfg.checks[key]?'checked':''}" id="cb-${id}-${key}">${cfg.checks[key]?'<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>':''}</div><span class="check-label"><span>${info.label}</span> — ${info.desc}</span></div>`).join('')}
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:flex-end;gap:8px">
+      <button class="btn btn-ghost btn-sm" onclick="resetChecks('${id}')">↺ Reset</button>
+      <button class="btn btn-primary btn-sm" onclick="markAllChecks('${id}')">✓ Tout valider</button>
+    </div>
+  </div>
+
+  <div id="tab-snippet" class="tab-panel ${activeTab==='snippet'?'active':''}">
+    <div class="card">
+      <div class="card-header"><span class="card-header-title">Balises HTML recommandées</span><button class="btn btn-ghost btn-sm" onclick="copySnippet('${id}')">⧉ Copier</button></div>
+      <div class="card-body"><div class="code-block" id="snippet-${id}">${htmlSnippet}</div><div style="font-size:11px;color:var(--color-text-faint)">💡 Pour un site à la racine — remplacer <code style="font-family:var(--font-mono)">/</code> par <code style="font-family:var(--font-mono)">./</code> pour un sous-dossier.</div></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-header-title">Comparaison registry</span></div>
+      <div class="card-body">
+        <table class="reg-table"><thead><tr><th>Champ</th><th>Registry (source)</th><th>Config locale</th></tr></thead><tbody>
+          ${[['themeColor',ic.themeColor,cfg.themeColor],['visualBase',ic.visualBase,cfg.visualBase],['priority',ic.priority,cfg.priority],['repo',ic.repo,cfg.repo]].map(([k,orig,curr])=>`<tr><td class="monospace">${k}</td><td style="font-family:var(--font-mono);font-size:12px;color:var(--color-text-muted)">${orig}</td><td style="font-family:var(--font-mono);font-size:12px;color:${orig!==curr?'var(--color-warning)':'var(--color-success)'}">${curr}${orig!==curr?' ●':''}</td></tr>`).join('')}
+        </tbody></table>
+      </div>
+    </div>
+  </div>
+  `;
+}
+
+function generateHTMLSnippet(themeColor, id) {
+  return `<span class="c-comment">&lt;!-- ${id} — favicon kit --&gt;</span>\n<span class="c-tag">&lt;link</span> <span class="c-attr">rel=</span><span class="c-val">"icon"</span> <span class="c-attr">href=</span><span class="c-val">"/favicon.ico"</span> <span class="c-attr">sizes=</span><span class="c-val">"any"</span><span class="c-tag">&gt;</span>\n<span class="c-tag">&lt;link</span> <span class="c-attr">rel=</span><span class="c-val">"icon"</span> <span class="c-attr">type=</span><span class="c-val">"image/svg+xml"</span> <span class="c-attr">href=</span><span class="c-val">"/favicon.svg"</span><span class="c-tag">&gt;</span>\n<span class="c-tag">&lt;link</span> <span class="c-attr">rel=</span><span class="c-val">"icon"</span> <span class="c-attr">type=</span><span class="c-val">"image/png"</span> <span class="c-attr">sizes=</span><span class="c-val">"32x32"</span> <span class="c-attr">href=</span><span class="c-val">"/favicon-32.png"</span><span class="c-tag">&gt;</span>\n<span class="c-tag">&lt;link</span> <span class="c-attr">rel=</span><span class="c-val">"apple-touch-icon"</span> <span class="c-attr">href=</span><span class="c-val">"/apple-touch-icon.png"</span><span class="c-tag">&gt;</span>\n<span class="c-tag">&lt;link</span> <span class="c-attr">rel=</span><span class="c-val">"manifest"</span> <span class="c-attr">href=</span><span class="c-val">"/site.webmanifest"</span><span class="c-tag">&gt;</span>\n<span class="c-tag">&lt;meta</span> <span class="c-attr">name=</span><span class="c-val">"theme-color"</span> <span class="c-attr">content=</span><span class="c-val">"${themeColor}"</span><span class="c-tag">&gt;</span>`;
+}
+
+function updateCfg(id,key,val){ configState[id][key]=val; }
+function updateColor(id,val){
+  configState[id].themeColor=val;
+  const s=document.getElementById('swatch-'+id); if(s)s.style.background=val;
+  const t=document.getElementById('ctext-'+id); if(t)t.value=val;
+  const l=document.getElementById('color-label-'+id); if(l)l.textContent=val;
+  refreshSnippet(id);
+}
+function updateColorText(id,val){ if(/^#[0-9a-fA-F]{6}$/.test(val)){ configState[id].themeColor=val; const s=document.getElementById('swatch-'+id); if(s)s.style.background=val; const c=document.getElementById('cpick-'+id); if(c)c.value=val; refreshSnippet(id); } }
+function applyPreset(id,color){ updateColor(id,color); const c=document.getElementById('cpick-'+id); if(c)c.value=color; const t=document.getElementById('ctext-'+id); if(t)t.value=color; }
+function refreshSnippet(id){ const el=document.getElementById('snippet-'+id); if(el)el.innerHTML=generateHTMLSnippet(configState[id].themeColor,id); }
+function toggleExportFile(id,key,el){ configState[id].checks[key]=!configState[id].checks[key]; const dot=el.querySelector('.export-status'); if(dot)dot.className='export-status '+(configState[id].checks[key]?'status-ok':'status-unknown'); updateProgress(id); }
+function toggleCheck(id,key){
+  configState[id].checks[key]=!configState[id].checks[key];
+  const c=document.getElementById('chk-'+id+'-'+key); if(c)c.className='check-item '+(configState[id].checks[key]?'done':'');
+  const cb=document.getElementById('cb-'+id+'-'+key); if(cb){cb.className='checkbox '+(configState[id].checks[key]?'checked':''); cb.innerHTML=configState[id].checks[key]?'<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>':''}
+  updateProgress(id);
+}
+function markAllChecks(id){ Object.keys(configState[id].checks).forEach(k=>{configState[id].checks[k]=true;}); renderContent(id); toast('✓ Tous les fichiers validés','success'); }
+function resetChecks(id){ Object.keys(configState[id].checks).forEach(k=>{configState[id].checks[k]=false;}); renderContent(id); toast('Checklist réinitialisée'); }
+function updateProgress(id){
+  const cfg=configState[id];
+  const done=Object.values(cfg.checks).filter(Boolean).length;
+  const total=Object.values(cfg.checks).length;
+  const pct=Math.round((done/total)*100);
+  const bar=document.querySelector('.progress-bar'); if(bar)bar.style.width=pct+'%';
+}
+function saveCfg(id){ toast('Config sauvegardée (session)','success'); }
+function resetCfg(id){
+  const orig=REGISTRY.icons.find(x=>x.iconId===id);
+  configState[id].themeColor=orig.themeColor;
+  configState[id].visualBase=orig.visualBase;
+  configState[id].repo=orig.repo;
+  configState[id].priority=orig.priority;
+  renderContent(id); toast('Config réinitialisée');
+}
+function copySnippet(id){
+  const raw=`<!-- ${id} — favicon kit -->\n<link rel="icon" href="/favicon.ico" sizes="any">\n<link rel="icon" type="image/svg+xml" href="/favicon.svg">\n<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">\n<link rel="apple-touch-icon" href="/apple-touch-icon.png">\n<link rel="manifest" href="/site.webmanifest">\n<meta name="theme-color" content="${configState[id].themeColor}">`;
+  navigator.clipboard.writeText(raw).then(()=>toast('Snippet copié !','success')).catch(()=>toast('Copie manuelle nécessaire'));
+}
+function switchTab(tab){ activeTab=tab; renderContent(activeId); }
+function toast(msg,type){
+  const c=document.getElementById('toast-container');
+  const el=document.createElement('div');
+  el.className='toast '+(type==='success'?'toast-success':'');
+  el.innerHTML=`<div class="toast-dot" style="background:${type==='success'?'var(--color-success)':'var(--color-text-faint)'}"></div>${msg}`;
+  c.appendChild(el); setTimeout(()=>el.remove(),2800);
+}
+function toggleTheme(){
+  const html=document.documentElement;
+  const next=html.getAttribute('data-theme')==='dark'?'light':'dark';
+  html.setAttribute('data-theme',next);
+  const btn=document.getElementById('theme-btn');
+  btn.innerHTML=next==='dark'
+    ?'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'
+    :'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>';
+}
+buildSidebar();
+</script>
+</body>
+</html>

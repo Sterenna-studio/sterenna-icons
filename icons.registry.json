@@ -1,6 +1,6 @@
 {
   "repository": "Sterenna-studio/sterenna-icons",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "naming": {
     "pattern": "<scope>-<project>",
     "exports": [
@@ -31,7 +31,7 @@
       "repo": "Sterenna-studio/nitro-clicker",
       "priority": "P0",
       "themeColor": "#070b14",
-      "visualBase": "éclair / monnaie / pixel"
+      "visualBase": "\u00e9clair / monnaie / pixel"
     },
     {
       "iconId": "botanica-obscura",
@@ -45,21 +45,27 @@
       "repo": "Sterenna-studio/skill-arena",
       "priority": "P0",
       "themeColor": "#100814",
-      "visualBase": "arène / lame / skill"
+      "visualBase": "ar\u00e8ne / lame / skill"
     },
     {
       "iconId": "nitro-titan-rocket-run",
       "repo": "Sterenna-studio/titan-rocket-run",
       "priority": "P0",
       "themeColor": "#070b14",
-      "visualBase": "fusée Titan"
+      "visualBase": "fus\u00e9e Titan"
     },
     {
       "iconId": "pokegang",
       "repo": "Sterenna-studio/pokegang-game",
       "priority": "P0",
       "themeColor": "#101018",
-      "visualBase": "pokéball/gang stylisé"
+      "visualBase": "pok\u00e9ball/gang stylis\u00e9",
+      "sourceRef": {
+        "repo": "Sterenna-studio/pokegang-game",
+        "path": "assets/pokegang_logo/pokegang_logo_little.png",
+        "type": "png",
+        "note": "Logo PNG existant \u2014 \u00e0 utiliser comme base pour g\u00e9n\u00e9rer les exports"
+      }
     },
     {
       "iconId": "chronicles-tcg",
@@ -73,14 +79,14 @@
       "repo": "Sterenna-studio/bzh-breach-storm",
       "priority": "P1",
       "themeColor": "#090711",
-      "visualBase": "faille / tempête"
+      "visualBase": "faille / temp\u00eate"
     },
     {
       "iconId": "bzh-nemeton-lockdown",
       "repo": "Sterenna-studio/bzh-nemeton-lockdown",
       "priority": "P1",
       "themeColor": "#07120b",
-      "visualBase": "arbre sacré / verrou"
+      "visualBase": "arbre sacr\u00e9 / verrou"
     },
     {
       "iconId": "spirit-overdrive",

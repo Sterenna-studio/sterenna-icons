@@ -1,0 +1,96 @@
+name: Deploy to nitro.sterenna.fr
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'exports/**'
+      - 'tools/gui/**'
+      - 'icons.registry.json'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry-run (rsync --dry-run, no actual transfer)'
+        required: false
+        default: 'false'
+        type: choice
+        options: ['false', 'true']
+
+concurrency:
+  group: deploy-nitro
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy icons → nitro.sterenna.fr
+    runs-on: ubuntu-latest
+    environment: nitro
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ── SSH agent ──────────────────────────────────────────────────────────
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.NITRO_SSH_KEY }}
+
+      - name: Add server to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H "${{ secrets.NITRO_SSH_HOST }}" >> ~/.ssh/known_hosts
+
+      # ── Dry-run guard ──────────────────────────────────────────────────────
+      - name: Set rsync flags
+        id: flags
+        run: |
+          DRY=''
+          if [ "${{ github.event.inputs.dry_run }}" = 'true' ]; then
+            DRY='--dry-run'
+            echo '⚠️  DRY-RUN mode — no files will be transferred'
+          fi
+          echo "extra=$DRY" >> "$GITHUB_OUTPUT"
+
+      # ── Deploy exports/ ───────────────────────────────────────────────────
+      - name: Deploy exports/
+        run: |
+          rsync -avz --delete \
+            ${{ steps.flags.outputs.extra }} \
+            exports/ \
+            "${{ secrets.NITRO_SSH_USER }}@${{ secrets.NITRO_SSH_HOST }}:${{ secrets.NITRO_DEPLOY_PATH }}/exports/"
+
+      # ── Deploy GUI ────────────────────────────────────────────────────────
+      - name: Deploy tools/gui/
+        run: |
+          rsync -avz --delete \
+            ${{ steps.flags.outputs.extra }} \
+            tools/gui/ \
+            "${{ secrets.NITRO_SSH_USER }}@${{ secrets.NITRO_SSH_HOST }}:${{ secrets.NITRO_DEPLOY_PATH }}/gui/"
+
+      # ── Deploy registry ───────────────────────────────────────────────────
+      - name: Deploy icons.registry.json
+        run: |
+          rsync -avz \
+            ${{ steps.flags.outputs.extra }} \
+            icons.registry.json \
+            "${{ secrets.NITRO_SSH_USER }}@${{ secrets.NITRO_SSH_HOST }}:${{ secrets.NITRO_DEPLOY_PATH }}/icons.registry.json"
+
+      # ── Remote: fix permissions ───────────────────────────────────────────
+      - name: Fix permissions on server
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          ssh "${{ secrets.NITRO_SSH_USER }}@${{ secrets.NITRO_SSH_HOST }}" \
+            "find ${{ secrets.NITRO_DEPLOY_PATH }} -type f -exec chmod 644 {} \; && find ${{ secrets.NITRO_DEPLOY_PATH }} -type d -exec chmod 755 {} \;"
+
+      # ── Summary ───────────────────────────────────────────────────────────
+      - name: Summary
+        run: |
+          echo '## ✅ Deploy nitro.sterenna.fr' >> $GITHUB_STEP_SUMMARY
+          echo '' >> $GITHUB_STEP_SUMMARY
+          echo "| | |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
+          echo "| **Host** | ${{ secrets.NITRO_SSH_HOST }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Path** | ${{ secrets.NITRO_DEPLOY_PATH }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Commit** | ${{ github.sha }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Dry-run** | ${{ github.event.inputs.dry_run || 'false' }} |" >> $GITHUB_STEP_SUMMARY

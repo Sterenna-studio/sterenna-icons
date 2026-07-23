@@ -30,7 +30,9 @@
       "repo": "Sterenna-studio/bzh-universe",
       "priority": "P0",
       "themeColor": "#070b14",
-      "visualBase": "triskel / BZH cyber"
+      "visualBase": "triskel / BZH cyber",
+      "source": "sources/bzh-universe/bzh-universe-neon-dark.png",
+      "exportStatus": "ready"
     },
     {
       "iconId": "nitro-clicker",
@@ -44,7 +46,9 @@
       "repo": "Sterenna-studio/botanica-obscura",
       "priority": "P0",
       "themeColor": "#08120d",
-      "visualBase": "feuille obscure / graine"
+      "visualBase": "feuille obscure / graine",
+      "source": "sources/botanica-obscura/botanica-obscura-homunculus-shaded-complex-core.svg",
+      "exportStatus": "ready"
     },
     {
       "iconId": "nitro-skill-arena",
